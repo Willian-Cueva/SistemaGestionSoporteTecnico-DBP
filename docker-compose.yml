@@ -1,0 +1,36 @@
+version: '3'
+services:
+  api: 
+        container_name: proyectoSGST
+        restart: always
+        build: .
+        ports: 
+              - "5000:3000"
+        environment:
+            - HOST=0.0.0.0
+            - PORT= 5000
+        links:
+              - mongo
+        volumes:
+              - .:/usr/src/app
+
+  mongo:      
+      container_name: dbproyectoSGST
+      image: mongo
+      restart: always
+      ports:
+             - "27017:27017"
+      volumes:
+            - .:/data/app
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    links:
+      - mongo
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongo:27017/
